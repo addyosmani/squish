@@ -37,11 +37,23 @@ export function DropZone({ onFilesDrop }: DropZoneProps) {
     e.target.value = '';
   }, [onFilesDrop]);
 
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const fileInput = document.getElementById('fileInput') as HTMLInputElement | null;
+      fileInput?.click();
+    }
+  }, []);
+
   return (
     <div
       className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center hover:border-blue-500 transition-colors"
       onDrop={handleDrop}
       onDragOver={handleDragOver}
+      tabIndex={0}
+      onKeyDown={handleKeyDown} 
+      role="button"
+      aria-label="Upload images by dropping or selecting files"
     >
       <input
         type="file"
