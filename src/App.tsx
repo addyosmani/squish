@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { Image, Trash2 } from 'lucide-react';
 import { CompressionOptions } from './components/CompressionOptions';
 import { DropZone } from './components/DropZone';
@@ -6,6 +6,7 @@ import { ImageList } from './components/ImageList';
 import { DownloadAll } from './components/DownloadAll';
 import { useImageQueue } from './hooks/useImageQueue';
 import { DEFAULT_QUALITY_SETTINGS } from './utils/formatDefaults';
+import { downloadImage } from './utils/download';
 import type { ImageFile, OutputType, CompressionOptions as CompressionOptionsType } from './types';
 
 export function App() {
@@ -59,11 +60,7 @@ export function App() {
 
     for (const image of completedImages) {
       if (image.blob && image.outputType) {
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(image.blob);
-        link.download = `${image.file.name.split(".")[0]}.${image.outputType}`;
-        link.click();
-        URL.revokeObjectURL(link.href);
+       downloadImage(image)
       }
 
       await new Promise((resolve) => setTimeout(resolve, 100));
