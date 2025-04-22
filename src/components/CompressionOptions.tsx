@@ -39,10 +39,11 @@ export function CompressionOptions({
 
       {outputType !== 'png' && (
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label htmlFor='imageQualityRangeInput' className="block text-sm font-medium text-gray-700 mb-2">
             Quality: {options.quality}%
           </label>
           <input
+            id='imageQualityRangeInput'
             type="range"
             min="1"
             max="100"

@@ -37,11 +37,30 @@ export function DropZone({ onFilesDrop }: DropZoneProps) {
     e.target.value = '';
   }, [onFilesDrop]);
 
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const fileInput = document.getElementById('fileInput') as HTMLInputElement | null;
+      fileInput?.click();
+    }
+  }, []);
+
+  // New handler to trigger file input click when entire zone is clicked.
+  const handleClick = useCallback(() => {
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement | null;
+    fileInput?.click();
+  }, []);
+
   return (
     <div
-      className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center hover:border-blue-500 transition-colors"
+      className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center hover:border-blue-500 transition-colors cursor-pointer" // Added cursor-pointer
       onDrop={handleDrop}
       onDragOver={handleDragOver}
+      onClick={handleClick} // Added onClick handler
+      tabIndex={0}
+      onKeyDown={handleKeyDown} 
+      role="button"
+      aria-label="Upload images by dropping or selecting files"
     >
       <input
         type="file"
@@ -51,10 +70,7 @@ export function DropZone({ onFilesDrop }: DropZoneProps) {
         accept="image/*,.jxl"
         onChange={handleFileInput}
       />
-      <label
-        htmlFor="fileInput"
-        className="cursor-pointer flex flex-col items-center gap-4"
-      >
+      <div className="flex flex-col items-center gap-4">
         <Upload className="w-12 h-12 text-gray-400" />
         <div>
           <p className="text-lg font-medium text-gray-700">
@@ -64,7 +80,7 @@ export function DropZone({ onFilesDrop }: DropZoneProps) {
             Supports JPEG, PNG, WebP, AVIF, and JXL
           </p>
         </div>
-      </label>
+      </div>
     </div>
   );
 }

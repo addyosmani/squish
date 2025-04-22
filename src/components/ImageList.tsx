@@ -54,16 +54,28 @@ export function ImageList({ images, onRemove }: ImageListProps) {
               {image.status === 'pending' && (
                 <span>Ready to process</span>
               )}
+              
               {image.status === 'processing' && (
+              <span className="flex flex-col items-start gap-1 text-sm text-gray-500">
                 <span className="flex items-center gap-2">
                   <Loader2 className="w-4 h-4 animate-spin" />
-                  Processing...
+                  Processing ({image.progress ? `${image.progress}%` : '...'})
                 </span>
-              )}
+                {image.elapsed && (
+                  <span className="text-xs">
+                    {image.elapsed} sec elapsed
+                  </span>
+                )}
+              </span>
+            )}
               {image.status === 'complete' && (
                 <span className="flex items-center gap-2 text-green-600">
                   <CheckCircle className="w-4 h-4" />
-                  Complete
+                  Completed {image.elapsed && (<span className="text-xs">
+                    in {image.elapsed} seconds.
+                  </span>
+                )}
+
                 </span>
               )}
               {image.status === 'error' && (
